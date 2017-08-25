@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" class="">
+
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+</head>
+
+<body>
+    <style media="screen">
+        #id_selected_tab2 li {
+            list-style: none;
+        }
+        
+        #id_selected_tab2 a {
+            font-style: italic;
+            float: left;
+            padding: 10px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+    </style>
+
+    <nav>NAV</nav>
+    <header>HEADER</header>
+    <main>
+        <fieldset>
+            <select id="categories">
+                        <option
+                            data-count="55"
+                            value="All">All
+                        </option>
+                        <option
+                            data-count="24"
+                            value="BalanceTransfer">Balance Transfer
+                        </option>
+                        <option
+                            data-count="2"
+                            value="CashbackandRewards">Cashback and Rewards
+                        </option>
+                        <option
+                            data-count="15"
+                            value="ImproveCredit">Improve Credit
+                        </option>
+                        <option
+                            data-count="14"
+                            value="Purchases">Purchases
+                        </option>
+                </select>
+        </fieldset>
+        <button id="myButton">TABS</button>
+    </main>
+    <footer>FOOTER</footer>
+
+    <!-- CODE -->
+    <script type="text/javascript">
+        document.getElementById("myButton").addEventListener("click", changeToTabs);
+
+        function changeToTabs() {
+            document.getElementById("myButton").remove();
+
+            var newDiv = document.createElement('div');
+            newDiv.id = 'new-tabs';
+            newDiv.classList.add('tabs');
+            var newUl = document.createElement('ul');
+            newUl.id = 'id_selected_tab2';
+            newUl.classList.add('tab-links');
+            newDiv.appendChild(newUl);
+
+            var newTabs = document.getElementById("new-tabs");
+            document.getElementsByTagName("fieldset")[0].appendChild(newDiv);
+
+            var select = document.getElementById('categories');
+            var options = select.options;
+            for (var i = 0; i < options.length; i++) {
+                var option = options[i];
+                var node = document.createElement('li');
+                node.id = 'id_selected_' + (i + 1);
+                if (i == 0) {
+                    node.classList.add('active');
+                };
+                node.innerHTML = '<a>' + option.text + ' ' + '(' + option.dataset.count + ')' + '</a>';
+                node.dataset.value = option.value;
+                node.dataset.count = option.dataset.count;
+                document.getElementById("id_selected_tab2").appendChild(node);
+            }
+
+            var tabLinksList = document.getElementById('id_selected_tab2');
+            var tablinks = tabLinksList.querySelectorAll('li');
+
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].addEventListener('click', function(event) {
+                    selectedTab(event, this.dataset.value);
+                });
+            }
+
+            function selectedTab(e, selectedValue) {
+                for (let i = 1; i < 6; i++) {
+                    document.querySelector('#id_selected_' + i).classList.remove('active');
+                };
+                e.target.parentElement.classList.add('active');
+                let value = selectedValue;
+                document.querySelector('#categories [value="' + value + '"]').selected = true;
+                var event = document.createEvent("HTMLEvents");
+                event.initEvent("change", true, false);
+                document.querySelector('#categories').dispatchEvent(event);
+                mboxTrack("categories_engagement");
+            };
+        };
+
+    </script>
+    <!-- CODE -->
+
+</body>
+
+</html>
